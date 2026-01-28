@@ -178,8 +178,18 @@ table.tantou tr:nth-child(odd) td {
     background-color: #eaf6fe;
 }
 
-@media (min-width: 800px) {
+/* @media (min-width: 767px) {
     ul.songs {
         column-count: 3;
+    }
+} */
+
+@media (min-width: 767px) {
+    div.songs {
+        display: flex;
+        justify-content: space-between;
+    }
+    div.songs div {
+        width: 45%;
     }
 }
