@@ -534,7 +534,7 @@
                     onReady: playerReady,
                     onStateChange(e) {
                         if (e.data === YT.PlayerState.PLAYING && onSongStarted) {
-                            console.log(e.data)
+                            alert(`state=${e.data}`)
                             onSongStarted()
                             onSongStarted = null
                             onSongError = null
