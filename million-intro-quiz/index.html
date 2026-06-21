@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>im@s-intro-quiz</title>
+    <style>
+        button {
+            font-size: 2em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>アイマスイントロクイズ！</h1>
+    <button type="button" disabled id="start-button">スタート！</button>
+    <button type="button" disabled id="answer-button" style="display: none">答えを見る</button>
+    <button type="button" id="correct-button" style="display: none">正解</button>
+    <button type="button" id="incorrect-button" style="display: none">不正解</button>
+    <p>回答時間:<span id="timer">00.0</span></p>
+    <p>正解数:<span id="correct-count">0</span> 誤答数:<span id="incorrect-count">0</span> 平均正解時間:<span id="average-time">記録なし</span></p>
+    <p>残り曲数:<span id="remaining-song-count"></span></p>
+    <p id="status">ボタンを押してスタート</p>
+    <p id="song-title" style="display: none"></p>
+    <div id="player" style="display: none"> </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        const songIds = [
+            '-FGMZtw5wFA',
+            'LcT5EGALfvw',
+            '-ksPkGh7GYY',
+            'HnxtCPSnRiI',
+            'S8Jei7xFJJ4',
+            'cQzOtTwWtiY',
+            'j77jsluhsTQ',
+            'iqKas5YMRPk',
+            'sZ--IpFyYJc',
+            'hTBGZLAzfVg',
+            'Ih6Mi3YwBEc',
+            '7SBrmRXrCMo',
+            'FPQCh1z9Lpo',
+            'MyZry4TxgqI',
+            'Iuete84dXwE',
+            'a3MNRBKTPz4',
+            'ZabUWkDpe9I',
+            'uzUU6rXRSEs',
+            '3iuQ8oCHzQA',
+            'aekFxVX3ZVo',
+            'w-B0avzcyjQ',
+            'voM1UDGbbe0',
+            'uGhTq4NNFVU',
+            '_lhVm9XVlD0',
+            'mFzN8ccO80o',
+            'CPMm6HHLNZQ',
+            'FkbhA3A2ARk',
+            'UORQ4vI--_w',
+            'YBUfZwasnVk',
+            'K4l3klGc9xY',
+            '61AT62up-vs',
+            'HuO89I7P4ps',
+            'kT1YG0fDg7I',
+            '6KeP8iWBmKQ',
+            'vNUnfhm3Ifc',
+            '_QqEOE8GnDs',
+            'z9c9RtTLVP8',
+            'TTGcrVY1_fE',
+            'vVeWz-zOyx8',
+            'uDVa6jMMaZg',
+            'Ixy6OqmQPGc',
+            'KyFc-nqjR_g',
+            'z5FYbAEffAw',
+            '6awC7_ahQLY',
+            '2pBBVjataZA',
+            'Wpwz0dIsV2E',
+            'noIbzd8k_QM',
+            'HXyVCEMlq20',
+            '0dCwCq7Yjfo',
+            'dXWwMVsXbp4',
+            'gJYo9Km2gkE',
+            'Q6g6ZtKf_iw',
+            'Ee1-FQJIkJw',
+            'qskn0OISxIA',
+            'tRcRXrdwdHI',
+            'fy2Gk5fgRlU',
+            'NMrRGNGAmpc',
+            '0-ON3SNGdFQ',
+            'p42nox25bnI',
+            'WuLvsvNeifI',
+            'jBL7u8vXrZM',
+            'xG9WT0z6zec',
+            'ovYdbWlZUeA',
+            'WOBTJX8jess',
+            'bBCRrzeCbk8',
+            'bclEobFcc7A',
+            'zhKmfZvWe3c',
+            'aSIgYoxvM3Q',
+            'mbyBtTn5IdA',
+            'k1YLH-7o7hg',
+            'gUUV4XqQMA4',
+            'huK3Nlz_T0k',
+            'hP6WsUrJb3A',
+            'TwmDHn-Qa6k',
+            'wpCr1PGPaKE',
+            'HNtImorm5MQ',
+            'mS1Gttap71A',
+            'hZnIlUtKZfE',
+            '21LtnbJg-tU',
+            'qWTLVAmpv3M',
+            'W1HvhUo_RzE',
+            '45-NOYrinL0',
+            'NamwZszOeAs',
+            '0Df4P7Gbpow',
+            '3sfmGUoPOgY',
+            '5d_ZKnOgLoI',
+            'mce1fyXN2So',
+            'QwmHufiqUfw',
+            'TM2hbEAgMaU',
+            'v6jlhssTJNA',
+            'gBaDlfu5s8I',
+            'N4QJMn16HU4',
+            'ww5WsIZY7lE',
+            'o-Es4M6OgNk',
+            '4oA71-PMVDk',
+            'Tlzw2SGS1qo',
+            '6duRZFWFHYw',
+            'W0DrfoAu4Ck',
+            '90ADK_UM-VI',
+            'DxyCwpQ_zTY',
+            'b8Qhgef4-G8',
+            'aNVZC_eumJ0',
+            'qYbppL03gdE',
+            '1WD_8IlrW48',
+            'TfY87DKs7kQ',
+            'Xci96gKNeSk',
+            'La-fRvgU5ow',
+            'aD6IvmFXBDg',
+            'NuLbZuhMVNs',
+            'f5PoFiLXGcQ',
+            'kc5lYw7dPTw',
+            'R7nLYrMcKDQ',
+            'GKNaO9s_AKE',
+            'KHO-GguO0RQ',
+            'n8XMXiR3WT0',
+            'pZHhCYtey74',
+            'Zo_4-eis_6s',
+            'S0PxiYYSsZw',
+            'h7RJMfR66og',
+            'iqjGWOmFVik',
+            '921GfvjCrn4',
+            'yoqX17Q7CLk',
+            '_rtOE2bLqqU',
+            'W1gZfqs8aDM',
+            'TtCk0ghvF90',
+            'JukVboD4a1E',
+            'b9LN6whqhS0',
+            'V08Jrsa50BQ',
+            'w7FkAeWh1S8',
+            'Ro1E62Quneo',
+            'CzLH3ipVT5o',
+            'EPZSqb-Vacs',
+            'EH6br1oX4mU',
+            'W28EAcRVEdY',
+            'uxbm4bA8ew0',
+            'MJA_i8kqgxA',
+            'x9ELGKdLRVw',
+            'mPuW9fyOFRY',
+            'cw68FjV7lbE',
+            '7VK291Ztpmw',
+            'EBqgYPo8_GU',
+            'Sfo7UwWIleg',
+            'bSwnKYYQHi4',
+            'YQZJr4eUh-I',
+            '260z2Pp3ajY',
+            '4Gtnv2NRiGk',
+            'QGNNNhoJKsk',
+            '6MSnlqFIIZM',
+            '65jUONWrk8Y',
+            'iyZD67OXK-s',
+            'nQLIA9pzzsQ',
+            '0WO6EbIR_r4',
+            'LwHOyFiyMTU',
+            'XGo-J74Rdk4',
+            'XwhljxylR_4',
+            '5m2Tl_b6wC0',
+            '-4lbOKFRk2k',
+            'wHZxg-Km69E',
+            'scyh94o7k8g',
+            '0LLssHOMH4E',
+            'miy789T6w9c',
+            '-uns7Hxx-Z8',
+            '4PXouVhBWW4',
+            'NS_Ouw1e9Bk',
+            'ERbeEEdmzBk',
+            'EBJq9789c6k',
+            'jPE91YRV5k8',
+            'ErjMUBUyRj4',
+            'wXBkhynYGXU',
+            'J723VG6_lsI',
+            'lvT4dP2PsmU',
+            'bbBFuK8c32s',
+            'h7E5aaGZUR4',
+            'WKnq8DCdD4k',
+            '556ijFeHpgs',
+            'Wb9BBYgGE0U',
+            'oWu0LFhYoCQ',
+            'jK6GOqYAyOA',
+            'spgKt_1djsw',
+            'vskT4w-48QY',
+            'QAD8K4IYYoA',
+            'PUkiQRzXvCw',
+            'fTDahWXcG_w',
+            '2mxd07nr4TE',
+            'UJ1bsJKXMyI',
+            'mXnK4imFDT0',
+            'tVT73cqQ71I',
+            'l1bNsUKKnqY',
+            'BQDLLTu-dOc',
+            '9BM_MY8oI6s',
+            '7oYRc9k4P5w',
+            'baO4CubG1zg',
+            'e6xNAh7Wb6A',
+            'N6XQr_s1WFI',
+            'jCQLfTDCwSM',
+            '736lhs3hm38',
+            'icMFQ75A9Jg',
+            'w_R87WNNWMc',
+            'tWZqvmI1IJ8',
+            'CrAG42FbE3w',
+            'iH4FWE-et-Y',
+            'pCug6GmhNy8',
+            '8ITEF26Udzo',
+            'caiYKVL_uTA',
+            '89n2XIdKFSw',
+            'uCWumAa7Jvg',
+            'NG9--qc96Qk',
+            'm8rj6CssFVY',
+            'OAYLyycXqDQ',
+            'XV1l2w_tXiE',
+            'hIRLBhiJ2Bs',
+            'ZHrXUz5toNE',
+            'cl6ai0dke5w',
+            'zqm1uxlINbw',
+            's4YsJ6mlj1o',
+            '_44ejm9cfUM',
+            'P5y-jUOUJuU',
+            'UkLGLRMJOj4',
+            'ieet5gJyhDU',
+            'se9RdMTdq_c',
+            'MTXNPxe8v9k',
+            'WjjpKENH-ZA',
+            'RJYwr7vFoeM',
+            'xjsXR4aakNs',
+            'Ex4EvDngwwE',
+            'AggolIx7FQc',
+            'zOVpFX_pCJw',
+            '-DzIGZ7MFzw',
+            'W-HtU9-aFs0',
+            '8Lw5rScLXxM',
+            'YgsrUrs_f9M',
+            'w6qVXhmmhcA',
+            'zqcrKQQ7NR0',
+            '4jSsQcbxGH4',
+            'CCLUR0uGL9E',
+            'fHYDwlYo7bg',
+            'rPp6NQYr7zU',
+            'RGGeF8e3PwQ',
+            'HQEni1T3t7M',
+            'IHcdp3NhD5M',
+            'o6PjrMZmWcc',
+            'uDPwu2Pudb4',
+            'EDA1Zjm1q1o',
+            'l9kAK87HVAo',
+            'WCW3-Y8rkz8',
+            'PTK_6H7ECg4',
+            'YBrpOwQlxB4',
+            '_BqL3KpH9C0',
+            'OrWo0sbC0W4',
+            '5RJQMBozp08',
+            '6rzlYpq8m6w',
+            'D0uOynlIRNs',
+            'Fsic4l8dyh4',
+            'bp_Uo5DwIPY',
+            'KdjIIPVoj9k',
+            '1O0yM1zZdwQ',
+            'g0DNTlCam0g',
+            'Is_hXoOdyx8',
+            'zfZ7ul2OGY4',
+            'PEINhVwvXbI',
+            '7h--n8dayK8',
+            'QaJQabO9Q_Q',
+            'NUiNKUfz9VM',
+            'UrH8UW1WYNQ',
+            'qOM0Un5CamU',
+            'YZRodz2CCnc',
+            'UqCzzJ1yd38',
+            'O89TLxQNWHM',
+            '_4qETshDPbg',
+            'gQtzRFDCteU',
+            'udIAUcegEgw',
+            'k5-Wuuw5D00',
+            'JxII3iHsijU',
+            'pQVxzQyVIQE',
+            'YvJlTUT9lg0',
+            'jx5cYVRF__s',
+            'cMvb40caGao',
+            'cABx8Wl9YAw',
+            '85GmA8ZHif4',
+            'FPiwF4Fl61E',
+            '6Uiw9V2SXsk',
+            '195ZksGfYsE',
+            'sEkJbekMfI0',
+            'IKmnKjgMPHY',
+            'tw1zKpI11kQ',
+            'kd2yj_W0KCA',
+            'Ivht80KDexo',
+            'ZWAdDC5Fc60',
+            'EY_ujI6vBt8',
+            'YhPV-YewYCo',
+            's6Q_B_UTDKI',
+            'iBhyy2F-lx8',
+            'wLhxAJJAwBE',
+            'oLIPSy5XvJQ',
+            'zK1mg7xOKYM',
+            'i89xdDP2jng',
+            'ORYt4pJklxg',
+            'oGj4GKM9fX0',
+            '_ZRvTHAH65o',
+            '43-axjPdNFc',
+            'xXsHKPquKPg',
+            'a5X62ZQiaLg',
+            'cNqGtiVFkrQ',
+            'fQcjDJq4sOU',
+            'pxNDyVpG7m0',
+            'LLQ7m-l_7FQ',
+            '4KBbX6qDGNk',
+            'HJBcLcqe50I',
+            'IgtNZrTjtPQ',
+            'KqJ71WrlVJY',
+            'Z8Y8MVJ5R7I',
+            '10Kevs_wDPQ',
+            'beGZOf1_3hc',
+            'rXsvVNOu4N4',
+            '86uCF6NeQIw',
+            'Gn3b4u-SqgA',
+            'U2vrlsXqCD0',
+            'HRhrDwYUs2E',
+            '7opKpKqh5i8',
+            'I0HiUDoF7x4',
+            'OhM5kWgVlU4',
+            'CSWbkYEChq8',
+            'hyNT3BdC9UI',
+            '_DdENUyVQ5o',
+            'lGex7hvK5kM',
+            'O4CGWp5ZUCg',
+            'JpZ5iLD4S50',
+            '1aLjVcddyd4',
+            '6H9HzUqTeck',
+            'dj0CL_nJSLI',
+            'mwTxsQ5L0e0',
+            'PuNY8T0Vx5I',
+            'bXTRLaDT_Lg',
+            'F4vj6BAyOMI',
+            '3Hfh1SFwEdg',
+            'MC3QmTFwjWI',
+            'fZKzQ_LWig4',
+            'd1m5MhFTJ4M',
+            'DTNECLVa3lk',
+            'ZzQ4V78MSG4',
+            '_XE0oq0M9Yk',
+            'i734-lMvbwA',
+            'v8T8Qj-1x-M',
+            'v-8CsWJXrLI',
+            '1KirGWkJZLI',
+            'KfJ4x-Oruvg',
+            'h4qlMhn96zk',
+            'd9JE0w5AudU',
+            '2iKBXW1WYZk',
+            'lxInJHgnKXM',
+            'PkwEF5_mShI',
+            'DxN3-mJ8q98',
+            'p8u4AivQl0w',
+            'Zqby1eogDio',
+            'aXAcapStg_A',
+            'My1hBNsureA',
+            'EEj3iUEmt-k',
+            't5Kj6nsPsX4',
+            '3Mj1dua0TAI',
+            'lLt3wfTAPM0',
+            'o90keHLiA_w',
+            'DaKYdxn_ifI',
+            'VH5qSLoOvNI',
+            'bbXovNXz2sA',
+            'nHd0vPafYOw',
+            'KwveVlij4lc',
+            '3c8Uoh1KpM8',
+            'L5jnTnzHgIg',
+            'fejJF4a6CUA',
+            'fDMHHlPimAQ',
+            '64oWozqhBbo',
+            'VLobhrJimp0',
+            'VuBThXovu2s',
+            'DU1JiGEun8g',
+            'gWhoeEfsvVo',
+            'XqsLuwqlkrY',
+            'Qb89GNYo9Ew',
+            'sQpgZIJd7pY',
+            'CDCD83VXgyI',
+            'wMy_hG4tprw',
+            'YRQEBBTgdpA',
+            'HxQe5SVHlWQ',
+            '6JiosI_1jeA',
+            'WGYtZOyuy8Y',
+            'lrOtFCSp1PY',
+            'NydaiqWX2Y4',
+            'EZWFjeIwx1A',
+            '6cFkEZq-PgY',
+            'oCKyHiWYuqM',
+            'OCnTV9x9mFA',
+            'Iji4ODkdvXU',
+            'C38cR8TDRHk',
+            'o-YK2vu3P3c',
+            '9bXmrbPk040',
+            'TNUbYeC5EFg',
+            'fZYNPS5FKbQ',
+            'CBGa3ANE_60',
+            'H7AfzilyASo',
+            'n5PUJoiB06s',
+            'RpiPNsIFC7Y',
+            'mvtjuhFVdYQ',
+            'VDLbzmmyyNo',
+            'i_7Kgr4Wj8Y',
+            '7gl_p7NZwG0',
+            'lxrIX-Yq0HE',
+            'GRXOER-Tm3w',
+            'bvuM3aomRX8',
+            'pUAgtQ1MayY',
+            '4XzfNJI6JKg',
+            'AX2VSODd0r8',
+            '9iGcVdEwTZY',
+            'ctZVHZv984k',
+            'y4mpiahrBt4',
+            'GQoH5Fntzsk',
+            'Ego-u2TtOCo',
+            'e8tHtlhP2t0',
+            'OVm5Lzkh-l4',
+            'oWHsG0SqEmA',
+            'dWUWzNU59y8',
+            'rF-rDLR1QVw',
+            '5H5LUhmDtKY',
+            'Ay1iS1fpG8E',
+            'mdw9dKDU3MQ',
+            'N3j8BR7VXUg',
+            'dIHKDnoMAKs',
+            'e0dt0GkMF0A',
+            'nQAyuWZzBGA',
+            'r__FyUT39vI',
+            '5h-KyyjFdoc',
+            'X44t1Y4G35g',
+            '8KEjl-jj2kY',
+            'f6_yPQhY8Ts',
+            'qr_m1r7yjaI',
+            'gFXGNcNP18s',
+            'rmZw7--Mm1A',
+            'jDHAbIR0UZY',
+            'eLNYyLkysVY',
+            'hVuYo8zMCe4',
+            'Igi66lBRpQ8',
+            'guos5TeOrKQ',
+        ]
+
+        let remainingSongs = []
+        let totalCorrectTime = 0
+        let correctCount = 0
+        let incorrectCount = 0
+
+        let player
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                playerVars: {
+                    playsinline: 1,
+                },
+                events: {
+                    onReady: playerReady,
+                }
+            })
+        }
+
+        // const playerElement = document.getElementById('player')
+        const remainingSongCount = document.getElementById('remaining-song-count')
+        const songTitle = document.getElementById('song-title')
+        const startButton = document.getElementById('start-button')
+        const answerButton = document.getElementById('answer-button')
+        const correctButton = document.getElementById('correct-button')
+        const incorrectButton = document.getElementById('incorrect-button')
+        const statusElement = document.getElementById('status')
+        const timer = document.getElementById('timer')
+        const correctCountElement = document.getElementById('correct-count')
+        const incorrectCountElement = document.getElementById('incorrect-count')
+        const averageTimeElement = document.getElementById('average-time')
+
+        const playerReady = () => {
+            startButton.addEventListener('click', (e) => {
+                startButton.disabled = true
+                startButton.style.display = 'none'
+                answerButton.style.display = 'inline'
+                change().then(() => {
+                    startTimer()
+                    answerButton.disabled = false
+                })
+            })
+            answerButton.addEventListener('click', (e) => {
+                // playerElement.style.display = 'block'
+                document.getElementById('player').style.display = 'block'
+                correctButton.style.display = 'inline'
+                incorrectButton.style.display = 'inline'
+                answerButton.disabled = true
+                answerButton.style.display = 'none'
+                songTitle.style.display = 'block'
+                songTitle.innerText = player.getVideoData().title
+                stopTimer()
+            })
+            correctButton.addEventListener('click', (e) => {
+                // playerElement.style.display = 'none'
+                document.getElementById('player').style.display = 'none'
+                answerButton.style.display = 'inline'
+                correctButton.style.display = 'none'
+                incorrectButton.style.display = 'none'
+                songTitle.style.display = 'none'
+                correctCount++
+                correctCountElement.innerText = correctCount
+                totalCorrectTime += answerTime
+                averageTimeElement.innerText = Math.round(totalCorrectTime / correctCount) / 10
+                change().then(() => {
+                    startTimer()
+                    answerButton.disabled = false
+                })
+            })
+            incorrectButton.addEventListener('click', (e) => {
+                // playerElement.style.display = 'none'
+                document.getElementById('player').style.display = 'none'
+                answerButton.style.display = 'inline'
+                correctButton.style.display = 'none'
+                incorrectButton.style.display = 'none'
+                songTitle.style.display = 'none'
+                incorrectCount++
+                incorrectCountElement.innerText = incorrectCount
+                change().then(() => {
+                    startTimer()
+                    answerButton.disabled = false
+                })
+            })
+            startButton.disabled = false
+        }
+
+        const change = async () => {
+            if (!remainingSongs.length) {
+                remainingSongs = songIds
+            }
+            const song = remainingSongs[Math.floor(Math.random() * remainingSongs.length)]
+            remainingSongs = remainingSongs.filter(item => item !== song)
+            remainingSongCount.innerText = remainingSongs.length + 1
+            statusElement.innerText = '読み込み中'
+            await loadSong(song)
+            statusElement.innerText = '再生中'
+        }
+
+        function loadSong(songId) {
+            return new Promise(resolve => {
+
+                const handler = event => {
+                    if (event.data === YT.PlayerState.PLAYING) {
+
+                        player.removeEventListener(
+                            'onStateChange',
+                            handler
+                        );
+
+                        resolve();
+                    }
+                };
+
+                player.addEventListener(
+                    'onStateChange',
+                    handler
+                );
+
+                player.loadVideoById(songId);
+            });
+        }
+
+        let startTime
+        let timeoutID
+        let answerTime
+        const displayTime = () => {
+            const currentTime = new Date(Date.now() - startTime)
+            answerTime = currentTime.getMinutes() * 600 + currentTime.getSeconds() * 10 + Math.floor(currentTime.getMilliseconds() / 100)
+            timer.innerText = `${currentTime.getMinutes() * 60 + currentTime.getSeconds()}.${Math.floor(currentTime.getMilliseconds() / 100)}`
+            timeoutID = setTimeout(displayTime, 100)
+        }
+        const startTimer = () => {
+            startTime = Date.now()
+            displayTime()
+        }
+        const stopTimer = () => {
+            clearTimeout(timeoutID)
+        }
+    </script>
+</body>
+
+</html>
