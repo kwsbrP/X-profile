@@ -38,7 +38,7 @@
 </head>
 
 <body>
-    <h1>ミリオンライブ！イントロクイズ！</h1>
+    <h1>1ミリオンライブ！イントロクイズ！</h1>
     <div id="setting">
         <label for="playing-song-count">遊ぶ曲数を入力 </label><input style="width: 8rem;" min="1" type="number"
             placeholder="遊ぶ曲数を入力" id="playing-song-count"><br>
@@ -575,7 +575,9 @@
                 document.getElementById('result').style.display = 'none'
                 document.getElementById('controller').style.display = 'block'
                 answerButton.style.display = 'inline'
+                alert("change前")
                 const success = await change()
+                alert("change後")
                 if (success) {
                     startTimer()
                     answerButton.disabled = false
