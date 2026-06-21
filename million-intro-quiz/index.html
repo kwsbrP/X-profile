@@ -2,8 +2,6 @@
 <html lang="ja">
 
 <head>
-    <script>
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>million-intro-quiz</title>
@@ -14,10 +12,18 @@
 
         @media (max-width: 600px) {
             button {
-                width: 100%;
+                width: 45%;
                 max-width: 400px;
                 font-size: 1.5rem;
                 margin: 0.25rem;
+            }
+
+            #player {
+                max-height: 200px;
+            }
+
+            #player iframe {
+                max-height: 200px;
             }
         }
 
@@ -34,8 +40,8 @@
 <body>
     <h1>ミリオンライブ！イントロクイズ！</h1>
     <div id="setting">
-        <label for="playing-song-count">遊ぶ曲数を入力 </label><input style="width: 8rem;" min="1" type="number" placeholder="遊ぶ曲数を入力"
-            id="playing-song-count"><br>
+        <label for="playing-song-count">遊ぶ曲数を入力 </label><input style="width: 8rem;" min="1" type="number"
+            placeholder="遊ぶ曲数を入力" id="playing-song-count"><br>
         <button type="button" disabled id="start-button">スタート！</button>
         <button type="button" disabled id="start-all-button">全曲で遊ぶ</button>
     </div>
@@ -48,15 +54,17 @@
         <ul id="incorrect-songs"></ul>
     </div>
     <div id="controller" style="display: none;">
+        <p>
+        回答時間:<span id="timer">00.0</span><br>
+        正解数:<span id="correct-count">0</span> 誤答数:<span id="incorrect-count">0</span> 平均正解時間:<span
+                id="average-time">記録なし</span><br>
+        残り曲数:<span id="remaining-song-count"></span><br>
+        <span id="status"></span>
+        </p>
         <button type="button" disabled id="answer-button" style="display: none;">回答する</button>
         <button type="button" id="show-answer-button" style="display: none">答えを見る</button>
         <button type="button" id="correct-button" style="display: none">正解</button>
         <button type="button" id="incorrect-button" style="display: none">不正解</button>
-        <p>回答時間:<span id="timer">00.0</span></p>
-        <p>正解数:<span id="correct-count">0</span> 誤答数:<span id="incorrect-count">0</span> 平均正解時間:<span
-                id="average-time">記録なし</span></p>
-        <p>残り曲数:<span id="remaining-song-count"></span></p>
-        <p id="status"></p>
         <p id="song-title" style="display: none"></p>
         <div id="player" style="display: none"> </div>
         <script src="https://www.youtube.com/iframe_api"></script>
