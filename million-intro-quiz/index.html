@@ -29,13 +29,16 @@
 
         #player {
             max-width: 100%;
-            position: absolute;
-            left: -9999px;
-            top: -9999px;
         }
 
         #player iframe {
             max-width: 100%;
+        }
+
+        .hidden {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
         }
     </style>
 </head>
@@ -58,18 +61,18 @@
     </div>
     <div id="controller" style="display: none;">
         <p>
-        回答時間:<span id="timer">00.0</span><br>
-        正解数:<span id="correct-count">0</span> 誤答数:<span id="incorrect-count">0</span> 平均正解時間:<span
+            回答時間:<span id="timer">00.0</span><br>
+            正解数:<span id="correct-count">0</span> 誤答数:<span id="incorrect-count">0</span> 平均正解時間:<span
                 id="average-time">記録なし</span><br>
-        残り曲数:<span id="remaining-song-count"></span><br>
-        <span id="status"></span>
+            残り曲数:<span id="remaining-song-count"></span><br>
+            <span id="status"></span>
         </p>
         <button type="button" disabled id="answer-button" style="display: none;">回答する</button>
         <button type="button" id="show-answer-button" style="display: none">答えを見る</button>
         <button type="button" id="correct-button" style="display: none">正解</button>
         <button type="button" id="incorrect-button" style="display: none">不正解</button>
         <p id="song-title" style="display: none"></p>
-        <div id="player"> </div>
+        <div id="player" class="hidden"> </div>
         <script src="https://www.youtube.com/iframe_api"></script>
     </div>
 
@@ -620,7 +623,7 @@
                 player.playVideo()
                 statusElement.innerText = '再生中'
                 showAnswerButton.style.display = 'none'
-                document.getElementById('player').style.display = 'block'
+                document.getElementById('player').classList.remove('hidden')
                 correctButton.style.display = 'inline'
                 correctButton.disabled = false
                 incorrectButton.style.display = 'inline'
@@ -632,7 +635,7 @@
                 correctButton.disabled = true
                 incorrectButton.disabled = true
                 // playerElement.style.display = 'none'
-                document.getElementById('player').style.display = 'none'
+                document.getElementById('player').classList.add('hidden')
                 answerButton.style.display = 'inline'
                 correctButton.style.display = 'none'
                 incorrectButton.style.display = 'none'
@@ -657,7 +660,7 @@
                 correctButton.disabled = true
                 incorrectButton.disabled = true
                 // playerElement.style.display = 'none'
-                document.getElementById('player').style.display = 'none'
+                document.getElementById('player').classList.add('hidden')
                 answerButton.style.display = 'inline'
                 correctButton.style.display = 'none'
                 incorrectButton.style.display = 'none'
