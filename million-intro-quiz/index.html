@@ -760,6 +760,7 @@
         }
 
         function loadSong(songId) {
+            alert("loadSong開始")
             return new Promise((resolve, reject) => {
                 const timeoutID = setTimeout(() => {
                     onSongStarted = null
