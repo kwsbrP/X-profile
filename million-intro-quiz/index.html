@@ -29,6 +29,9 @@
 
         #player {
             max-width: 100%;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
         }
 
         #player iframe {
@@ -38,7 +41,7 @@
 </head>
 
 <body>
-    <h1>ミリオンライブ！イントロクイズ！</h1>
+    <h1>1ミリオンライブ！イントロクイズ！</h1>
     <div id="setting">
         <label for="playing-song-count">遊ぶ曲数を入力 </label><input style="width: 8rem;" min="1" type="number"
             placeholder="遊ぶ曲数を入力" id="playing-song-count"><br>
@@ -66,7 +69,7 @@
         <button type="button" id="correct-button" style="display: none">正解</button>
         <button type="button" id="incorrect-button" style="display: none">不正解</button>
         <p id="song-title" style="display: none"></p>
-        <div id="player" style="display: none"> </div>
+        <div id="player"> </div>
         <script src="https://www.youtube.com/iframe_api"></script>
     </div>
 
@@ -750,7 +753,6 @@
                     statusElement.innerText = '再生中'
                     return true
                 } catch (error) {
-                    alert("catch: " + error)
                     remainingSongs.splice(index, 1)
                     console.log(`動画エラー: ${song}`)
                 }
